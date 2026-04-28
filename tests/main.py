@@ -11,10 +11,11 @@ def run(playwright: Playwright) -> None:
     page.get_by_placeholder("What needs to be done?").press("Enter")
     page.get_by_role("checkbox", name="Toggle Todo").check()
 
+    expect(page.get_by_role("checkbox", name="Toggle Todo")).to_be_visible()
+
     # ---------------------
     context.close()
     browser.close()
-
 
 with sync_playwright() as playwright:
     run(playwright)
