@@ -39,7 +39,9 @@ def test_dialogs(page):
     page.goto("https://zimaev.github.io/dialog/")
     page.get_by_text("Диалог Alert").click()
     page.get_by_text("Диалог Confirmation").click()
-    page.get_by_text("Диалог Prompt").click()
+    dialog = page.get_by_text("Диалог Prompt")
+    dialog.click()
+    page.screenshot(path="dialog.png", full_page=True)
 
 def test_select_multiple(page):
     page.goto('https://zimaev.github.io/upload/')
@@ -59,3 +61,12 @@ def test_download(page):
     download.save_as(os.path.join(destination_folder_path, file_name))
 
 
+def test_new_tab(page):
+    page.goto("https://zimaev.github.io/tabs/")
+    with page.context.expect_page() as tab:
+        page.get_by_text("Переход к Dashboard").click()
+
+    new_tab = tab.value
+    assert new_tab.url == "https://zimaev.github.io/tabs/dashboard/index.html?"
+    sign_out = new_tab.locator('.nav-link', has_text='Sign out')
+    assert sign_out.is_visible()
